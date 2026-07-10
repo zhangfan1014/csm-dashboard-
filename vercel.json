@@ -1,0 +1,19 @@
+{
+  "functions": {
+    "api/*.js": {
+      "maxDuration": 10
+    }
+  },
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET, OPTIONS" }
+      ]
+    }
+  ],
+  "rewrites": [
+    { "source": "/api/customers", "destination": "/api/customers.js" }
+  ]
+}
