@@ -144,8 +144,13 @@ table.data .tbn{background:rgba(239,68,68,.1);color:#ef4444}
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
 <script>
+const SUPABASE_URL = 'https://qccyordptksqrljkyxbr.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_1oh3IEz5pJWFkdosG1C-Fw_LlrYRYUX';
+const supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 let customers = [];
 let charts = {};
 
@@ -160,13 +165,15 @@ function switchPage(name) {
 // ====== Data ======
 async function fetchData() {
   try {
-    const r = await fetch('/api/customers');
-    const d = await r.json();
-    customers = d.customers || d.table1 || [];
-    if (d.table2) customers = customers.concat(d.table2);
+    const { data, error } = await supabase
+      .from('customers')
+      .select('*')
+      .order('id', { ascending: true });
+    if (error) throw error;
+    customers = data || [];
     render();
   } catch(e) {
-    document.getElementById('list').innerHTML = '<div class="loading">无法连接数据服务<br><span style="font-size:12px">运行: node server.js</span></div>';
+    document.getElementById('list').innerHTML = '<div class="loading">无法连接数据库<br><span style="font-size:12px">' + e.message + '</span></div>';
   }
 }
 
@@ -179,9 +186,9 @@ function render() {
 // ====== Dashboard ======
 function renderDashboard() {
   const all = customers;
-  const visited = all.filter(c => String(c['是否已拜访']||'').includes('是')).length;
-  const indep = all.filter(c => String(c['销售模式']||'').includes('独立')).length;
-  const joint = all.filter(c => String(c['销售模式']||'').includes('联合')).length;
+  const visited = all.filter(c => String(c['拜访概要']||'').trim()).length;
+  const indep = all.filter(c => String(c['经营模式']||'').includes('独立')).length;
+  const joint = all.filter(c => String(c['经营模式']||'').includes('联合')).length;
 
   document.getElementById('kpi1').textContent = all.length;
   document.getElementById('kpi2').textContent = visited;
@@ -194,12 +201,12 @@ function renderDashboard() {
     .map(([k,v]) => `<span class="stat-item"><b>${k}</b>: ${v}家</span>`).join('');
 
   document.getElementById('heroStats').innerHTML =
-    `<span class="stat-item"><b>${all.length}</b> 家 · <b>${visited}</b> 已拜访 · <b>${all.length-visited}</b> 待拜访</span>` +
-    `<span class="stat-item">年费 <b>${all.filter(c=>String(c['买断|年费']||'').includes('年费')).length}</b> · 买断 <b>${all.filter(c=>String(c['买断|年费']||'').includes('买断')).length}</b></span>`;
+    `<span class="stat-item"><b>${all.length}</b> 家 · 有拜访记录 <b>${visited}</b> 家</span>` +
+    `<span class="stat-item">年费 <b>${all.filter(c=>String(c['买断年费']||'').includes('年费')).length}</b> · 买断 <b>${all.filter(c=>String(c['买断年费']||'').includes('买断')).length}</b></span>`;
 
   // Charts
   const lv2 = {}; all.forEach(c => { const l = c['客户等级']||'未分类'; lv2[l]=(lv2[l]||0)+1; });
-  const md = {}; all.forEach(c => { const m = c['销售模式']||'未知'; md[m]=(md[m]||0)+1; });
+  const md = {}; all.forEach(c => { const m = c['经营模式']||'未知'; md[m]=(md[m]||0)+1; });
   pie('chartLevel', lv2, ['#2563eb','#f59e0b','#10b981','#8e90a6']);
   pie('chartMode', md, ['#1d4ed8','#06b6d4','#f093fb','#8e90a6']);
 }
@@ -250,33 +257,26 @@ function renderCustomers(data) {
     var level = c['customItem187__c-label'] || c['客户等级'] || '—';
 
     // 经营模式: 判别规则（ownerId = 张帆 → 独立经营）
-    var ownerName = c['ownerId-name'] || c['对应销售'] || '';
-    var mode = '—';
-    if (c['经营模式']) {
-      mode = c['经营模式'];
-    } else if (ownerName.includes('张帆')) {
-      mode = '独立经营';
-    } else if (ownerName) {
-      mode = '联合经营';
-    } else {
-      var excelMode = String(c['销售模式']||'');
-      if (excelMode.includes('独立')) mode = '独立经营';
-      else if (excelMode.includes('联合')) mode = '联合经营';
+    var ownerName = c['对应销售']||'';
+    var mode = c['经营模式'] || '';
+    if (!mode) {
+      if (ownerName.includes('张帆')) mode = '独立经营';
+      else if (ownerName) mode = '联合经营';
     }
 
     // 买断/年费: CRM > Excel
-    var contractType = c['customItem319__c-label'] || c['买断|年费'] || '—';
+    var contractType = c['买断年费'] || '—';
 
     // 合同到期: CRM expireTime > Excel
-    var contractEnd = c['expireTime_formatted'] || c['customItem214__c_formatted'] || c['最近合同的到期时间']||c['合同到期']||'—';
+    var contractEnd = c['最近合同到期'] || '—';
     if (contractEnd && contractEnd.length > 10) contractEnd = contractEnd.substring(0,10);
 
     // 最近拜访: CRM customItem263__c > Excel
-    var visitDate = c['customItem263__c_formatted'] || c['customItem264__c_formatted'] || c['visitLatestTime_formatted'] || c['拜访日期']||'—';
+    var visitDate = c['最近拜访日期'] || '—';
     if (visitDate && visitDate.length > 10) visitDate = visitDate.substring(0,10);
 
     // 拜访概要: CRM comment > Excel
-    var note = c['comment'] || c['跟进记录（6月5日）']||c['跟进记录（6.26邀约）']||c['一句话总结']||'';
+    var note = c['拜访概要'] || '';
     var noteShort = note ? (note.length > 50 ? note.substring(0,50)+'...' : note) : '—';
 
     var modeTag = '';
@@ -314,8 +314,8 @@ function filter() {
   var d = customers;
   if(q) d = d.filter(function(c){return Object.values(c).some(function(v){return String(v||'').toLowerCase().includes(q)})});
   if(fl) d = d.filter(function(c){return String(c['客户等级']||'').includes(fl)});
-  if(fm) d = d.filter(function(c){return String(c['销售模式']||'').includes(fm)});
-  if(fv) d = d.filter(function(c){return String(c['是否已拜访']||'').includes(fv)});
+  if(fm) d = d.filter(function(c){return String(c['经营模式']||'').includes(fm)});
+  if(fv) d = d.filter(function(c){return String(c['买断年费']||'').includes(fv)});
   renderCustomers(d);
 }
 
