@@ -149,7 +149,14 @@ table.data .tbn{background:rgba(239,68,68,.1);color:#ef4444}
 <script>
 const SUPABASE_URL = 'https://qccyordptksqrljkyxbr.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_1oh3IEz5pJWFkdosG1C-Fw_LlrYRYUX';
-const supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+async function supabaseQuery(path) {
+  const r = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+    headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
+  });
+  if (!r.ok) throw new Error(`DB ${r.status}: ${await r.text()}`);
+  return r.json();
+}
 
 let customers = [];
 let charts = {};
@@ -165,15 +172,22 @@ function switchPage(name) {
 // ====== Data ======
 async function fetchData() {
   try {
-    const { data, error } = await supabase
-      .from('customers')
-      .select('*')
-      .order('id', { ascending: true });
-    if (error) throw error;
+    // Test Supabase connection first
+    const testUrl = SUPABASE_URL + '/rest/v1/customers?select=*&order=id.asc';
+    const r = await fetch(testUrl, {
+      headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY }
+    });
+    if (!r.ok) {
+      const errText = await r.text();
+      throw new Error('HTTP ' + r.status + ': ' + errText.slice(0,100));
+    }
+    const data = await r.json();
     customers = data || [];
+    document.getElementById('footerInfo').textContent = '共 ' + customers.length + ' 家客户 · 数据来源: Supabase';
     render();
   } catch(e) {
-    document.getElementById('list').innerHTML = '<div class="loading">无法连接数据库<br><span style="font-size:12px">' + e.message + '</span></div>';
+    console.error('Supabase error:', e);
+    document.getElementById('list').innerHTML = '<div class="loading">无法连接数据库</div>';
   }
 }
 
