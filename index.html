@@ -3,609 +3,325 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CSM客户信息看板</title>
+<title>CSM 客户全景看板</title>
 <style>
-/* ---- Design System v2.0 - Gradient Tech ---- */
-:root {
-  --bg-primary: #f5f7fa;
-  --bg-secondary: #eef1f5;
-  --bg-card: #ffffff;
-  --bg-card-hover: #f8faff;
-  --text-primary: #1a1a2e;
-  --text-secondary: #555770;
-  --text-muted: #8e90a6;
-  --text-inverse: #ffffff;
-  --border-light: #e8ecf1;
-  --border-card: rgba(0,0,0,0.06);
-  --gradient-1: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);
-  --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  --gradient-3: linear-gradient(135deg, #06b6d4 0%, #22d3ee 100%);
-  --gradient-4: linear-gradient(135deg, #10b981 0%, #34d399 100%);
-  --gradient-5: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
-  --gradient-6: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
-  --gradient-7: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 50%, #06b6d4 100%);
-  --accent-primary: #2563eb;
-  --accent-secondary: #1d4ed8;
-  --accent-info: #06b6d4;
-  --accent-success: #10b981;
-  --accent-warning: #f59e0b;
-  --accent-danger: #ef4444;
-  --accent-glow-rgb: 37, 99, 235;
-  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-  --font-mono: "SF Mono", "Fira Code", "Consolas", monospace;
-  --font-size-xs: 0.75rem;
-  --font-size-sm: 0.875rem;
-  --font-size-base: 1rem;
-  --font-size-lg: 1.125rem;
-  --font-size-xl: 1.25rem;
-  --font-size-2xl: 1.5rem;
-  --font-size-3xl: 1.875rem;
-  --font-size-4xl: 2.25rem;
-  --space-xs: 0.25rem;
-  --space-sm: 0.5rem;
-  --space-md: 1rem;
-  --space-lg: 1.5rem;
-  --space-xl: 2rem;
-  --space-2xl: 3rem;
-  --space-3xl: 4rem;
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
-  --radius-full: 9999px;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
-  --shadow-lg: 0 10px 30px rgba(0,0,0,0.1);
-  --shadow-xl: 0 20px 60px rgba(0,0,0,0.12);
-  --shadow-glow: 0 0 20px rgba(var(--accent-glow-rgb), 0.3);
-  --shadow-card: 0 2px 8px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.06);
-  --transition-fast: 0.15s ease;
-  --transition-base: 0.3s ease;
-  --transition-slow: 0.5s ease;
-  --page-max-width: 1200px;
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{
-  font-family:var(--font-family);font-size:var(--font-size-base);
-  line-height:1.6;color:var(--text-primary);background:var(--bg-primary);
-  -webkit-font-smoothing:antialiased;min-height:100vh;
-}
-.hero{
-  position:relative;padding:var(--space-3xl) var(--space-xl);text-align:center;overflow:hidden;
-}
-.hero::before{content:'';position:absolute;inset:0;background:var(--gradient-7);opacity:0.06;z-index:0}
-.hero::after{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 50% 50%,rgba(var(--accent-glow-rgb),0.08) 0%,transparent 60%);z-index:0}
-.hero>*{position:relative;z-index:1}
-.hero h1{font-size:var(--font-size-4xl);font-weight:800;background:var(--gradient-1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:var(--space-md);letter-spacing:-0.02em}
-.hero p{font-size:var(--font-size-lg);color:var(--text-secondary);max-width:600px;margin:0 auto}
-.page-container{max-width:var(--page-max-width);margin:0 auto;padding:0 var(--space-xl)}
-.section{padding:var(--space-2xl) 0}
-.section-title{font-size:var(--font-size-2xl);font-weight:700;margin-bottom:var(--space-xl);color:var(--text-primary);position:relative;padding-left:var(--space-lg)}
-.section-title::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:4px;height:24px;background:var(--gradient-1);border-radius:2px}
-.card{
-  background:var(--bg-card);border:1px solid var(--border-card);
-  border-radius:var(--radius-lg);padding:var(--space-xl);
-  box-shadow:var(--shadow-card);transition:transform var(--transition-base),box-shadow var(--transition-base);
-}
-.card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
-.kpi-card{
-  background:var(--bg-card);border:1px solid var(--border-card);
-  border-radius:var(--radius-lg);padding:var(--space-xl);
-  position:relative;overflow:hidden;box-shadow:var(--shadow-card);
-  transition:transform var(--transition-base),box-shadow var(--transition-base);
-}
-.kpi-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
-.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gradient-1)}
-.kpi-card.accent-2::before{background:var(--gradient-2)}
-.kpi-card.accent-3::before{background:var(--gradient-3)}
-.kpi-card.accent-4::before{background:var(--gradient-4)}
-.kpi-label{font-size:var(--font-size-sm);color:var(--text-muted);margin-bottom:var(--space-sm)}
-.kpi-value{font-size:var(--font-size-4xl);font-weight:800;background:var(--gradient-1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.2}
-.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--space-xl)}
-.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-xl)}
-.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-xl)}
-@media(max-width:768px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}}
-.chart-container{
-  background:var(--bg-card);border:1px solid var(--border-card);
-  border-radius:var(--radius-lg);padding:var(--space-xl);box-shadow:var(--shadow-card);
-}
-.chart-container .chart-title{font-size:var(--font-size-lg);font-weight:600;margin-bottom:var(--space-lg);color:var(--text-primary)}
-.tag{display:inline-flex;align-items:center;padding:2px 10px;border-radius:var(--radius-full);font-size:var(--font-size-xs);font-weight:500}
-.tag-primary{background:rgba(var(--accent-glow-rgb),0.1);color:var(--accent-primary)}
-.tag-success{background:rgba(16,185,129,0.1);color:#059669}
-.tag-warning{background:rgba(245,158,11,0.1);color:#b45309}
-.tag-danger{background:rgba(239,68,68,0.1);color:var(--accent-danger)}
-.btn-gradient{
-  display:inline-flex;align-items:center;gap:var(--space-sm);
-  padding:10px 24px;background:var(--gradient-1);color:white;
-  border:none;border-radius:var(--radius-full);font-size:var(--font-size-sm);
-  font-weight:600;cursor:pointer;text-decoration:none;
-  transition:transform var(--transition-fast),box-shadow var(--transition-fast);
-  box-shadow:0 4px 15px rgba(var(--accent-glow-rgb),0.4);
-}
-.btn-gradient:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(var(--accent-glow-rgb),0.5)}
-.hero-stats{display:flex;justify-content:center;gap:var(--space-2xl);margin-top:var(--space-xl);flex-wrap:wrap}
-.hero-stat{text-align:center}
-.hero-stat-value{font-size:var(--font-size-3xl);font-weight:800;background:var(--gradient-1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.2}
-.hero-stat-label{font-size:var(--font-size-sm);color:var(--text-muted);margin-top:var(--space-xs)}
-@keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-.animate-fade-in{animation:fadeInUp 0.6s ease forwards}
-.animate-delay-1{animation-delay:0.1s;opacity:0}
-.animate-delay-2{animation-delay:0.2s;opacity:0}
-.animate-delay-3{animation-delay:0.3s;opacity:0}
-.animate-delay-4{animation-delay:0.4s;opacity:0}
-.flex-between{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-md)}
+:root{--bg:#f5f7fa;--card:#fff;--text:#1a1a2e;--text2:#555770;--text3:#8e90a6;--border:rgba(0,0,0,0.06);--sidebar:#1a1a2e;--sidetext:#a0a0b8;--sideactive:#fff;--g1:linear-gradient(135deg,#1d4ed8,#3b82f6);--g2:linear-gradient(135deg,#f093fb,#f5576c);--g3:linear-gradient(135deg,#06b6d4,#22d3ee);--g4:linear-gradient(135deg,#10b981,#34d399);--font:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;--r:12px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;display:flex}
 
-/* ---- Customer Card ---- */
-.customer-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:var(--space-lg)}
-.customer-card{
-  background:var(--bg-card);border:1px solid var(--border-card);
-  border-radius:var(--radius-lg);padding:var(--space-lg);box-shadow:var(--shadow-card);
-  transition:transform var(--transition-base),box-shadow var(--transition-base);cursor:pointer;
-}
-.customer-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
-.customer-card .c-name{font-size:var(--font-size-base);font-weight:600;color:var(--text-primary);margin-bottom:var(--space-sm)}
-.customer-card .c-summary{font-size:var(--font-size-sm);color:var(--text-secondary);margin-bottom:var(--space-md);line-height:1.5}
-.customer-card .c-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:var(--space-md)}
-.customer-card .c-detail{font-size:var(--font-size-xs);color:var(--text-muted);line-height:1.8}
-.customer-card .c-detail span{margin-right:var(--space-md)}
-.customer-card .c-contact{font-size:var(--font-size-xs);color:var(--text-muted);margin-top:var(--space-sm);padding-top:var(--space-sm);border-top:1px solid var(--border-light)}
-.customer-card.expanded{grid-column:1/-1}
-.customer-card.expanded .c-full-detail{display:block}
-.customer-card .c-full-detail{display:none;margin-top:var(--space-md);padding:var(--space-md);background:var(--bg-secondary);border-radius:var(--radius-md);font-size:var(--font-size-sm);color:var(--text-secondary);line-height:1.8}
+/* ===== Sidebar ===== */
+.sidebar{width:200px;min-height:100vh;background:var(--sidebar);padding:24px 0;display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;z-index:10}
+.sidebar .logo{color:var(--sideactive);font-size:15px;font-weight:700;padding:0 20px 24px 20px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:12px}
+.sidebar .logo span{display:block;font-size:11px;font-weight:400;color:var(--sidetext);margin-top:4px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:12px 20px;color:var(--sidetext);font-size:13px;cursor:pointer;transition:all .15s;border-left:3px solid transparent}
+.nav-item:hover{color:var(--sideactive);background:rgba(255,255,255,0.05)}
+.nav-item.active{color:var(--sideactive);background:rgba(255,255,255,0.08);border-left-color:#3b82f6;font-weight:600}
+.nav-item .icon{font-size:16px;width:20px;text-align:center}
+.sidebar .footer{margin-top:auto;padding:20px;font-size:10px;color:var(--sidetext);opacity:0.5}
 
-/* ---- Search & Filter ---- */
-.search-bar{
-  display:flex;gap:var(--space-md);margin-bottom:var(--space-xl);flex-wrap:wrap;align-items:center;
-}
-.search-bar input{
-  flex:1;min-width:200px;padding:10px 16px;border:1px solid var(--border-light);
-  border-radius:var(--radius-md);font-size:var(--font-size-sm);
-  background:var(--bg-card);color:var(--text-primary);outline:none;transition:border-color var(--transition-fast);
-}
-.search-bar input:focus{border-color:var(--accent-primary);box-shadow:0 0 0 3px rgba(var(--accent-glow-rgb),0.1)}
-.search-bar select{
-  padding:10px 16px;border:1px solid var(--border-light);border-radius:var(--radius-md);
-  font-size:var(--font-size-sm);background:var(--bg-card);color:var(--text-primary);outline:none;cursor:pointer;min-width:120px;
-}
-.loading{text-align:center;padding:var(--space-3xl);color:var(--text-muted);font-size:var(--font-size-lg)}
-.error-state{text-align:center;padding:var(--space-3xl);color:var(--accent-danger)}
-.stat-row{display:flex;gap:var(--space-md);flex-wrap:wrap;margin-top:var(--space-md)}
-.stat-item{font-size:var(--font-size-sm);color:var(--text-secondary)}
-.stat-item b{color:var(--text-primary)}
-.gradient-text{background:var(--gradient-1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.gradient-text-2{background:var(--gradient-2);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.gradient-text-3{background:var(--gradient-3);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.data-table{width:100%;border-collapse:collapse;margin-top:var(--space-md)}
-.data-table th{text-align:left;font-size:var(--font-size-xs);font-weight:600;color:var(--text-muted);padding:var(--space-sm) var(--space-md);border-bottom:2px solid var(--border-light);white-space:nowrap}
-.data-table td{padding:var(--space-sm) var(--space-md);border-bottom:1px solid var(--border-light);font-size:var(--font-size-sm);color:var(--text-primary)}
-.data-table tr:hover td{background:var(--bg-card-hover)}
-.tab-bar{display:flex;gap:0;margin-bottom:var(--space-xl);background:var(--bg-card);border-radius:var(--radius-md);padding:4px;border:1px solid var(--border-light);display:inline-flex}
-.tab-item{padding:8px 20px;font-size:var(--font-size-sm);border-radius:var(--radius-sm);cursor:pointer;transition:all var(--transition-fast);color:var(--text-secondary);font-weight:500}
-.tab-item.active{background:var(--gradient-1);color:white;box-shadow:var(--shadow-sm)}
-.section-desc{font-size:var(--font-size-sm);color:var(--text-muted);margin-top:calc(-1 * var(--space-md));margin-bottom:var(--space-lg)}
-/* table 2 field mapping names */
-.f2-label{color:var(--text-muted);font-size:var(--font-size-xs)}
+/* ===== Main ===== */
+.main{margin-left:200px;flex:1;padding:32px;max-width:calc(100vw - 200px)}
+.page{display:none}
+.page.active{display:block}
+
+/* ===== Dashboard ===== */
+.dash h1{font-size:24px;font-weight:800;background:var(--g1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px}
+.dash p{color:var(--text3);font-size:13px;margin-bottom:24px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
+@media(max-width:900px){.grid4{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px;position:relative;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--g1)}
+.kpi.a2::before{background:var(--g2)}.kpi.a3::before{background:var(--g3)}.kpi.a4::before{background:var(--g4)}
+.kl{font-size:11px;color:var(--text3);margin-bottom:6px;letter-spacing:.5px;text-transform:uppercase}
+.kv{font-size:26px;font-weight:800;background:var(--g1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.2}
+.cht{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.04);height:280px}
+.cht-title{font-size:14px;font-weight:600;margin-bottom:12px;color:var(--text)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+@media(max-width:900px){.grid2{grid-template-columns:1fr}}
+.stat-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.stat-item{font-size:12px;color:var(--text2)}.stat-item b{color:var(--text)}
+
+/* ===== Customer View ===== */
+.ctitle{font-size:20px;font-weight:700;margin-bottom:4px}
+.ctitle span{font-size:12px;font-weight:400;color:var(--text3);margin-left:8px}
+.csub{font-size:12px;color:var(--text3);margin-bottom:20px}
+.sbar{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.sbar input{flex:1;min-width:160px;padding:9px 12px;border:1px solid #e8ecf1;border-radius:8px;font-size:13px;outline:none;background:var(--card)}
+.sbar input:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,0.1)}
+.sbar select{padding:9px 12px;border:1px solid #e8ecf1;border-radius:8px;font-size:12px;cursor:pointer;background:var(--card)}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:12px}
+.cc{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px;box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.cn{font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px}
+.c-tags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}
+.tag{display:inline-flex;padding:2px 9px;border-radius:999px;font-size:10px;font-weight:500}
+.tl{background:rgba(37,99,235,.1);color:#2563eb}
+.to{background:rgba(245,158,11,.1);color:#b45309}
+.ty{background:rgba(16,185,129,.1);color:#059669}
+.tn{background:rgba(239,68,68,.1);color:#ef4444}
+.cf{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;font-size:12px;color:var(--text2);line-height:1.8}
+.cf .fl{color:var(--text3)}
+.cf .fv{color:var(--text)}
+.csummary{font-size:12px;color:var(--text2);margin-top:6px;padding-top:6px;border-top:1px solid #e8ecf1;line-height:1.5}
+
+/* ===== Data Table ===== */
+.table-wrap{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow-x:auto;box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+table.data{width:100%;border-collapse:collapse;font-size:13px}
+table.data th{text-align:left;padding:12px 14px;font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid #e8ecf1;white-space:nowrap;background:var(--bg)}
+table.data td{padding:10px 14px;border-bottom:1px solid #e8ecf1;color:var(--text)}
+table.data tr:hover td{background:rgba(37,99,235,0.03)}
+table.data .num{color:var(--text3);font-size:11px;width:32px;text-align:center}
+table.data .name{font-weight:600;color:var(--text)}
+table.data .ind{max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text2);font-size:12px}
+table.data .summary{max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text2);font-size:12px}
+table.data .tag-sm{display:inline-flex;padding:1px 8px;border-radius:999px;font-size:10px;font-weight:500}
+table.data .tbl{background:rgba(37,99,235,.1);color:#2563eb}
+table.data .tbo{background:rgba(245,158,11,.1);color:#b45309}
+table.data .tby{background:rgba(16,185,129,.1);color:#059669}
+table.data .tbn{background:rgba(239,68,68,.1);color:#ef4444}
+
+.loading{text-align:center;padding:60px;color:var(--text3);font-size:14px}
+.footer-info{font-size:11px;color:var(--text3);margin-top:20px;text-align:center}
 </style>
 </head>
 <body>
 
-<!-- ===== Hero ===== -->
-<header class="hero">
-  <h1>CSM 客户信息看板</h1>
-  <p>基于飞书多维表格实时同步 · 赵诗怡 & 星星 交接客户数据</p>
-  <div class="hero-stats" id="heroStats">
-    <div class="hero-stat"><div class="hero-stat-value" id="totalCustomers">—</div><div class="hero-stat-label">客户总数</div></div>
-    <div class="hero-stat"><div class="hero-stat-value gradient-text-2" id="visitedCustomers">—</div><div class="hero-stat-label">已拜访</div></div>
-    <div class="hero-stat"><div class="hero-stat-value gradient-text-3" id="annualFeeCustomers">—</div><div class="hero-stat-label">年费客户</div></div>
-    <div class="hero-stat"><div class="hero-stat-value" style="background:var(--gradient-5);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent" id="buyoutCustomers">—</div><div class="hero-stat-label">买断客户</div></div>
+<!-- ===== Sidebar ===== -->
+<div class="sidebar">
+  <div class="logo">CSM 看板<span>客户全景管理系统</span></div>
+  <div class="nav-item active" onclick="switchPage('dash')">
+    <span class="icon">&#9632;</span> 仪表板
   </div>
-</header>
+  <div class="nav-item" onclick="switchPage('customers')">
+    <span class="icon">&#9644;</span> 全量客户看板
+  </div>
+  <div class="footer">基于飞书大宽表 · v1.0</div>
+</div>
 
 <!-- ===== Main ===== -->
-<main class="page-container">
+<div class="main">
 
-  <!-- Tab Switch -->
-  <section class="section">
-    <div class="tab-bar" id="tabBar">
-      <div class="tab-item active" data-tab="table1">赵诗怡交接客户 (表1)</div>
-      <div class="tab-item" data-tab="table2">星星交接客户 (表2)</div>
-    </div>
-  </section>
+  <!-- Page: Dashboard -->
+  <div class="page active" id="page-dash">
+    <div class="dash">
+      <h1>仪表板</h1>
+      <p>客户数据总览 &middot; 关键指标分布</p>
 
-  <!-- KPI Section -->
-  <section class="section" id="kpiSection">
-    <div class="flex-between" style="margin-bottom:var(--space-md)">
-      <h2 class="section-title" style="margin-bottom:0">数据概览</h2>
-      <button class="btn-gradient" onclick="refreshData()" id="refreshBtn">
-        &#x21bb; 刷新数据
-      </button>
-    </div>
-    <div class="grid-4" id="kpiGrid">
-      <div class="kpi-card animate-fade-in animate-delay-1"><div class="kpi-label">表1 客户数</div><div class="kpi-value" id="kpi1">—</div></div>
-      <div class="kpi-card accent-2 animate-fade-in animate-delay-2"><div class="kpi-label">表2 客户数</div><div class="kpi-value gradient-text-2" id="kpi2">—</div></div>
-      <div class="kpi-card accent-3 animate-fade-in animate-delay-3"><div class="kpi-label">独立经营</div><div class="kpi-value gradient-text-3" id="kpi3">—</div></div>
-      <div class="kpi-card accent-4 animate-fade-in animate-delay-4"><div class="kpi-label">联合经营</div><div class="kpi-value" style="background:var(--gradient-4);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent" id="kpi4">—</div></div>
-    </div>
-    <div class="stat-row" id="statRow"></div>
-  </section>
+      <div class="grid4">
+        <div class="kpi"><div class="kl">客户总数</div><div class="kv" id="kpi1">—</div></div>
+        <div class="kpi a2"><div class="kl">已拜访</div><div class="kv" style="background:var(--g2);-webkit-background-clip:text" id="kpi2">—</div></div>
+        <div class="kpi a3"><div class="kl">独立经营</div><div class="kv" style="background:var(--g3);-webkit-background-clip:text" id="kpi3">—</div></div>
+        <div class="kpi a4"><div class="kl">联合经营</div><div class="kv" style="background:var(--g4);-webkit-background-clip:text" id="kpi4">—</div></div>
+      </div>
 
-  <!-- Chart Section -->
-  <section class="section">
-    <h2 class="section-title">客户分析</h2>
-    <p class="section-desc">客户等级、销售模式、合同类型分布</p>
-    <div class="grid-3" id="chartGrid">
-      <div class="chart-container" id="chartLevel" style="height:340px"><div class="chart-title">客户等级分布</div></div>
-      <div class="chart-container" id="chartSales" style="height:340px"><div class="chart-title">销售模式分布</div></div>
-      <div class="chart-container" id="chartContract" style="height:340px"><div class="chart-title">买断/年费分布</div></div>
-    </div>
-  </section>
+      <div class="stat-row" id="levelRow"></div>
 
-  <!-- Customer Cards Section -->
-  <section class="section">
-    <h2 class="section-title">客户列表</h2>
-    <div class="search-bar">
-      <input type="text" id="searchInput" placeholder="&#x1F50D; 搜索客户名称、行业、联系人..." oninput="filterCustomers()">
-      <select id="filterSelect" onchange="filterCustomers()">
-        <option value="">全部客户</option>
-        <option value="买断">买断</option>
-        <option value="年费">年费</option>
-        <option value="独立经营">独立经营</option>
-        <option value="联合经营">联合经营</option>
-        <option value="长尾客群">长尾客群</option>
-      </select>
-      <span style="font-size:var(--font-size-sm);color:var(--text-muted)" id="resultCount"></span>
-    </div>
-    <div id="customerList" class="customer-grid"></div>
-  </section>
+      <div class="grid2">
+        <div class="cht" id="chartLevel"><div class="cht-title">客户等级分布</div></div>
+        <div class="cht" id="chartMode"><div class="cht-title">经营模式分布</div></div>
+      </div>
 
-  <!-- Data Table Section -->
-  <section class="section">
-    <h2 class="section-title">数据明细表</h2>
-    <p class="section-desc">所有字段完整展示，支持导出</p>
-    <div class="card" style="overflow-x:auto" id="dataTableContainer">
-      <div class="loading" id="tableLoading">加载中...</div>
+      <div class="stat-row" style="justify-content:center" id="heroStats"></div>
     </div>
-  </section>
+  </div>
 
-  <!-- Footer Info -->
-  <section class="section" style="padding-top:0">
-    <div class="card" style="text-align:center;padding:var(--space-lg)">
-      <p style="font-size:var(--font-size-sm);color:var(--text-muted)">
-        数据来源: 飞书多维表格 · 最后更新: <span id="lastUpdate">—</span>
-      </p>
-      <p style="font-size:var(--font-size-sm);color:var(--text-muted);margin-top:4px">
-        销售易CRM同步: <span id="crmSyncStatus">—</span>
-      </p>
+  <!-- Page: Full Customer View -->
+  <div class="page" id="page-customers">
+    <div class="ctitle">全量客户看板 <span id="totalLabel">32家</span></div>
+    <div class="csub">仅展示关键字段 · 可筛选排序</div>
+
+    <div class="sbar">
+      <input type="text" id="q" placeholder="搜索客户名称..." oninput="filter()">
+      <select id="fl" onchange="filter()"><option value="">全部等级</option></select>
+      <select id="fm" onchange="filter()"><option value="">独立/联合</option><option value="独立">独立经营</option><option value="联合">联合经营</option></select>
+      <select id="fv" onchange="filter()"><option value="">拜访状态</option><option value="是">已拜访</option><option value="否">未拜访</option></select>
+      <span style="font-size:12px;color:var(--text3)" id="rcnt"></span>
     </div>
-  </section>
 
-</main>
+    <div class="table-wrap" id="list"><div class="loading">加载中...</div></div>
+
+    <div class="footer-info" id="footerInfo">数据加载中...</div>
+  </div>
+
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
 <script>
-// ====== Data Store ======
-let dataStore = { table1: [], table2: [] };
-let currentTab = 'table1';
+let customers = [];
 let charts = {};
 
-// ====== Fetch Data ======
+// ====== Navigation ======
+function switchPage(name) {
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelector(`.nav-item[onclick*="${name}"]`).classList.add('active');
+  document.getElementById(`page-${name}`).classList.add('active');
+}
+
+// ====== Data ======
 async function fetchData() {
   try {
-    const res = await fetch('/api/customers');
-    if (!res.ok) throw new Error('Network error');
-    const data = await res.json();
-    dataStore = data;
-    document.getElementById('lastUpdate').textContent = data.lastFetched ? new Date(data.lastFetched).toLocaleString('zh-CN') : '—';
-    // CRM sync status
-    const crmStatus = document.getElementById('crmSyncStatus');
-    if (data.crmSync) {
-      const st = data.crmSync;
-      const t = new Date(st.sync_time).toLocaleString('zh-CN');
-      crmStatus.innerHTML = `${st.matched} 条已同步 · ${t}`;
-      crmStatus.style.color = '#059669';
+    const r = await fetch('/api/customers');
+    const d = await r.json();
+    customers = d.customers || d.table1 || [];
+    if (d.table2) customers = customers.concat(d.table2);
+    render();
+  } catch(e) {
+    document.getElementById('list').innerHTML = '<div class="loading">无法连接数据服务<br><span style="font-size:12px">运行: node server.js</span></div>';
+  }
+}
+
+function render() {
+  renderDashboard();
+  renderCustomers(customers);
+  document.getElementById('footerInfo').textContent = `共 ${customers.length} 家客户 · 数据来源: 飞书多维表格大宽表`;
+}
+
+// ====== Dashboard ======
+function renderDashboard() {
+  const all = customers;
+  const visited = all.filter(c => String(c['是否已拜访']||'').includes('是')).length;
+  const indep = all.filter(c => String(c['销售模式']||'').includes('独立')).length;
+  const joint = all.filter(c => String(c['销售模式']||'').includes('联合')).length;
+
+  document.getElementById('kpi1').textContent = all.length;
+  document.getElementById('kpi2').textContent = visited;
+  document.getElementById('kpi3').textContent = indep;
+  document.getElementById('kpi4').textContent = joint;
+
+  const lv = {};
+  all.forEach(c => { const l = c['客户等级']; if(l) lv[l] = (lv[l]||0)+1; });
+  document.getElementById('levelRow').innerHTML = Object.entries(lv).sort((a,b)=>b[1]-a[1])
+    .map(([k,v]) => `<span class="stat-item"><b>${k}</b>: ${v}家</span>`).join('');
+
+  document.getElementById('heroStats').innerHTML =
+    `<span class="stat-item"><b>${all.length}</b> 家 · <b>${visited}</b> 已拜访 · <b>${all.length-visited}</b> 待拜访</span>` +
+    `<span class="stat-item">年费 <b>${all.filter(c=>String(c['买断|年费']||'').includes('年费')).length}</b> · 买断 <b>${all.filter(c=>String(c['买断|年费']||'').includes('买断')).length}</b></span>`;
+
+  // Charts
+  const lv2 = {}; all.forEach(c => { const l = c['客户等级']||'未分类'; lv2[l]=(lv2[l]||0)+1; });
+  const md = {}; all.forEach(c => { const m = c['销售模式']||'未知'; md[m]=(md[m]||0)+1; });
+  pie('chartLevel', lv2, ['#2563eb','#f59e0b','#10b981','#8e90a6']);
+  pie('chartMode', md, ['#1d4ed8','#06b6d4','#f093fb','#8e90a6']);
+}
+
+function pie(id, mp, cl) {
+  const el = document.getElementById(id);
+  if(!el) return;
+  if(charts[id]) charts[id].dispose();
+  const nm = Object.keys(mp), vl = Object.values(mp);
+  if(!nm.length) { el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text3);font-size:13px">暂无数据</div>'; return; }
+  const c = echarts.init(el);
+  charts[id] = c;
+  c.setOption({
+    tooltip:{trigger:'item',formatter:'{b}: {c} ({d}%)'},
+    series:[{type:'pie',radius:['35%','65%'],center:['50%','55%'],
+      itemStyle:{borderRadius:6,borderColor:'#fff',borderWidth:2},
+      label:{show:true,formatter:'{b}\\n{d}%',fontSize:11,color:'#555770'},
+      data:nm.map((n,i)=>({name:n,value:vl[i],itemStyle:{color:cl[i%cl.length]}}))}]
+  });
+}
+
+// ====== Customer Table (7 columns) ======
+function renderCustomers(data) {
+  // Populate level filter
+  const lvSet = new Set();
+  data.forEach(c => { if(c['客户等级']) lvSet.add(c['客户等级']); });
+  const sel = document.getElementById('fl');
+  // Keep only the first option (全部等级) and add new ones
+  while(sel.options.length > 1) sel.remove(1);
+  lvSet.forEach(l => { const o = document.createElement('option'); o.value=l; o.textContent=l; sel.appendChild(o); });
+
+  const list = document.getElementById('list');
+  if(!data||!data.length){list.innerHTML='<div class="loading">暂无数据</div>';return}
+
+  let html = '<table class="data"><thead><tr>'+
+    '<th style="width:36px">#</th>'+
+    '<th>客户名称</th>'+
+    '<th>客户等级</th>'+
+    '<th>经营模式</th>'+
+    '<th>买断/年费</th>'+
+    '<th>最近合同到期</th>'+
+    '<th>最近拜访日期</th>'+
+    '<th>拜访概要</th>'+
+    '</tr></thead><tbody>';
+
+  data.forEach(function(c, i) {
+    // 客户等级: CRM > Excel
+    var level = c['customItem187__c-label'] || c['客户等级'] || '—';
+
+    // 经营模式: 判别规则（ownerId = 张帆 → 独立经营）
+    var ownerName = c['ownerId-name'] || c['对应销售'] || '';
+    var mode = '—';
+    if (c['经营模式']) {
+      mode = c['经营模式'];
+    } else if (ownerName.includes('张帆')) {
+      mode = '独立经营';
+    } else if (ownerName) {
+      mode = '联合经营';
     } else {
-      crmStatus.textContent = '未同步';
-      crmStatus.style.color = '#b45309';
+      var excelMode = String(c['销售模式']||'');
+      if (excelMode.includes('独立')) mode = '独立经营';
+      else if (excelMode.includes('联合')) mode = '联合经营';
     }
-    renderAll();
-  } catch (e) {
-    document.getElementById('customerList').innerHTML = '<div class="error-state">无法连接到数据服务，请确认服务已启动。' +
-      '<br><span style="font-size:var(--font-size-sm)">运行: node server.js</span></div>';
-  }
-}
 
-async function refreshData() {
-  const btn = document.getElementById('refreshBtn');
-  btn.disabled = true;
-  btn.textContent = '刷新中...';
-  try {
-    await fetch('/api/refresh');
-    await fetchData();
-  } catch(e) {}
-  btn.disabled = false;
-  btn.innerHTML = '&#x21bb; 刷新数据';
-}
+    // 买断/年费: CRM > Excel
+    var contractType = c['customItem319__c-label'] || c['买断|年费'] || '—';
 
-// ====== Render ======
-function renderAll() {
-  const customers = getCurrentCustomers();
-  renderHeroStats();
-  renderKPI();
-  renderCharts();
-  renderCustomerCards(customers);
-  renderDataTable();
-}
+    // 合同到期: CRM expireTime > Excel
+    var contractEnd = c['expireTime_formatted'] || c['customItem214__c_formatted'] || c['最近合同的到期时间']||c['合同到期']||'—';
+    if (contractEnd && contractEnd.length > 10) contractEnd = contractEnd.substring(0,10);
 
-function getCurrentCustomers() {
-  return currentTab === 'table1' ? dataStore.table1 : dataStore.table2;
-}
+    // 最近拜访: CRM customItem263__c > Excel
+    var visitDate = c['customItem263__c_formatted'] || c['customItem264__c_formatted'] || c['visitLatestTime_formatted'] || c['拜访日期']||'—';
+    if (visitDate && visitDate.length > 10) visitDate = visitDate.substring(0,10);
 
-// Hero Stats
-function renderHeroStats() {
-  const t1 = dataStore.table1 || [];
-  const t2 = dataStore.table2 || [];
-  const all = [...t1, ...t2];
+    // 拜访概要: CRM comment > Excel
+    var note = c['comment'] || c['跟进记录（6月5日）']||c['跟进记录（6.26邀约）']||c['一句话总结']||'';
+    var noteShort = note ? (note.length > 50 ? note.substring(0,50)+'...' : note) : '—';
 
-  document.getElementById('totalCustomers').textContent = all.length;
-  document.getElementById('visitedCustomers').textContent =
-    countYes(all, '是否已拜访');
-  document.getElementById('annualFeeCustomers').textContent =
-    count(all, '买断|年费', '年费');
-  document.getElementById('buyoutCustomers').textContent =
-    count(all, '买断|年费', '买断');
-}
+    var modeTag = '';
+    if(mode.includes('独立')) modeTag = '<span class="tag-sm tby">独立经营</span>';
+    else if(mode.includes('联合')) modeTag = '<span class="tag-sm tbo">联合经营</span>';
+    else modeTag = '<span class="tag-sm" style="background:rgba(142,144,166,.1);color:#8e90a6">'+mode+'</span>';
 
-function count(arr, field, value) {
-  return arr.filter(c => {
-    const v = c[field];
-    return v && String(v).includes(value);
-  }).length;
-}
+    var lvTag = level !== '—' ? '<span class="tag-sm tbl">'+level+'</span>' : '—';
+    var ctTag = contractType !== '—' ? '<span class="tag-sm '+(contractType.includes('年费')?'tby':'tbn')+'">'+contractType+'</span>' : '—';
 
-function countYes(arr, field) {
-  return count(arr, field, '是');
-}
-
-// KPI
-function renderKPI() {
-  const t1 = dataStore.table1 || [];
-  const t2 = dataStore.table2 || [];
-  document.getElementById('kpi1').textContent = t1.length || 0;
-  document.getElementById('kpi2').textContent = t2.length || 0;
-
-  const all = [...t1, ...t2];
-  document.getElementById('kpi3').textContent = count(all, '销售模式', '独立经营') + count(all, '销售模式', '独立');
-  document.getElementById('kpi4').textContent = count(all, '销售模式', '联合经营') + count(all, '销售模式', '联合');
-
-  // stat row
-  const levels = {};
-  all.forEach(c => {
-    const lv = c['客户等级'];
-    if (lv) { levels[lv] = (levels[lv]||0)+1; }
+    html += '<tr>'+
+      '<td class="num">'+(i+1)+'</td>'+
+      '<td class="name">'+(c['客户名称']||'未命名')+'</td>'+
+      '<td>'+lvTag+'</td>'+
+      '<td>'+modeTag+'</td>'+
+      '<td>'+ctTag+'</td>'+
+      '<td style="font-size:12px;color:var(--text2)">'+contractEnd+'</td>'+
+      '<td style="font-size:12px;color:var(--text2)">'+visitDate+'</td>'+
+      '<td class="summary" title="'+(note||'')+'">'+noteShort+'</td>'+
+      '</tr>';
   });
-  const statRow = document.getElementById('statRow');
-  statRow.innerHTML = Object.entries(levels).map(([k,v]) =>
-    `<span class="stat-item"><b>${k}</b>: ${v}家</span>`
-  ).join('');
-}
 
-// Charts
-function renderCharts() {
-  // Only render for table1 (richer data)
-  const t1 = dataStore.table1 || [];
-  const data = currentTab === 'table1' ? t1 : (dataStore.table2 || []);
-
-  // Customer level distribution
-  const levelMap = {};
-  data.forEach(c => {
-    const lv = c['客户等级'] || '未分类';
-    levelMap[lv] = (levelMap[lv]||0)+1;
-  });
-  const chartColors = ['#2563eb','#1d4ed8','#06b6d4','#22d3ee','#10b981','#f093fb','#f59e0b'];
-
-  renderPie('chartLevel', '客户等级分布', levelMap, chartColors);
-
-  // Sales mode distribution
-  const salesMap = {};
-  data.forEach(c => {
-    const sm = c['销售模式'] || '未知';
-    salesMap[sm] = (salesMap[sm]||0)+1;
-  });
-  renderPie('chartSales', '销售模式分布', salesMap, ['#1d4ed8','#06b6d4','#f59e0b','#f093fb']);
-
-  // Contract type dist (buyout/annual)
-  const contractMap = {};
-  const fName = currentTab === 'table1' ? '买断|年费' : '买断|年费';
-  data.forEach(c => {
-    const ct = c[fName] || '未标注';
-    contractMap[ct] = (contractMap[ct]||0)+1;
-  });
-  renderPie('chartContract', '合同类型分布', contractMap, ['#10b981','#f59e0b','#8e90a6']);
-}
-
-function renderPie(containerId, title, dataMap, colors) {
-  const el = document.getElementById(containerId);
-  if (!el) return;
-  if (charts[containerId]) charts[containerId].dispose();
-
-  const names = Object.keys(dataMap);
-  const vals = Object.values(dataMap);
-  if (names.length === 0) {
-    el.innerHTML = `<div class="chart-title">${title}</div><div style="text-align:center;padding:40px;color:var(--text-muted)">暂无数据</div>`;
-    return;
-  }
-
-  const chart = echarts.init(el);
-  charts[containerId] = chart;
-
-  chart.setOption({
-    tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
-    series: [{
-      type: 'pie',
-      radius: ['35%','65%'],
-      center: ['50%','55%'],
-      avoidLabelOverlap: true,
-      itemStyle: { borderRadius: 6, borderColor: '#fff', borderWidth: 2 },
-      label: { show: true, formatter: '{b}\n{d}%', fontSize: 11, color: '#555770' },
-      labelLine: { length: 12, length2: 16 },
-      data: names.map((n,i) => ({ name: n, value: vals[i], itemStyle: { color: colors[i % colors.length] } })),
-      emphasis: { itemStyle: { shadowBlur: 10, shadowOffsetX: 0, shadowColor: 'rgba(0,0,0,0.2)' } }
-    }]
-  });
-}
-
-// Customer cards
-function renderCustomerCards(customers) {
-  const list = document.getElementById('customerList');
-  if (!customers || customers.length === 0) {
-    list.innerHTML = '<div class="card" style="text-align:center;color:var(--text-muted);grid-column:1/-1">暂无客户数据</div>';
-    document.getElementById('resultCount').textContent = '';
-    return;
-  }
-
-  if (currentTab === 'table1') {
-    list.innerHTML = customers.map((c,i) => buildCard1(c,i)).join('');
-  } else {
-    list.innerHTML = customers.map((c,i) => buildCard2(c,i)).join('');
-  }
-  document.getElementById('resultCount').textContent = `共 ${customers.length} 条`;
-}
-
-function buildCard1(c, i) {
-  const tags = [];
-  if (c['客户等级']) tags.push(`<span class="tag tag-primary">${c['客户等级']}</span>`);
-  if (c['客户类型']) tags.push(`<span class="tag tag-warning">${c['客户类型']}</span>`);
-  if (c['买断|年费']) {
-    const isAnnual = c['买断|年费'].includes('年费');
-    tags.push(`<span class="tag ${isAnnual?'tag-success':'tag-danger'}">${c['买断|年费']}</span>`);
-  }
-  if (c['销售模式']) {
-    const isInd = c['销售模式'].includes('独立');
-    tags.push(`<span class="tag" style="background:${isInd?'rgba(37,99,235,0.1)':'rgba(245,158,11,0.1)'};color:${isInd?'#2563eb':'#b45309'}">${c['销售模式']}</span>`);
-  }
-
-  return `<div class="customer-card animate-fade-in" style="animation-delay:${(i%4)*0.1}s" onclick="this.classList.toggle('expanded')">
-    <div class="c-name">${c['客户名称'] || '未命名客户'}</div>
-    <div class="c-summary">${c['一句话总结'] || '—'}</div>
-    <div class="c-tags">${tags.join('')}</div>
-    <div class="c-detail">
-      <span>&#x1F465; ${c['公司人数规模'] || '—'}</span>
-      <span>&#x1F4B0; ${c['合作金额'] || '—'}</span>
-      <span>&#x1F4C5; ${c['首次签约时间'] ? c['首次签约时间'].substring(0,10) : '—'}</span>
-    </div>
-    <div class="c-contact">
-      &#x1F4DE; ${c['客户联系方式'] || '—'} · &#x1F464; ${c['客户联系人'] || '—'} · &#x1F4E7; KP: ${c['KP联系方式'] ? c['KP联系方式'].substring(0,20) : '—'}
-    </div>
-    <div class="c-full-detail">
-      <b>公司业务:</b> ${c['公司业务概况'] || '—'}<br>
-      <b>拜访地址:</b> ${c['拜访地址'] || '—'}<br>
-      <b>产品版本:</b> ${c['产品版本'] || '—'} · ${c['私有化|分析云'] || '—'}<br>
-      <b>增值模块:</b> ${c['增值模块'] || '—'}<br>
-      <b>对应销售:</b> ${c['对应销售'] || '—'} · <b>服务群:</b> ${c['服务群'] || '—'}<br>
-      <b>客户账号:</b> ${c['客户账号数'] || '—'} · <b>云巡检:</b> ${c['云巡检'] || '—'}<br>
-      <b>最近合同到期:</b> ${c['最近合同的到期时间'] || '—'}<br>
-      <b>跟进记录:</b> ${c['跟进记录（6月5日）'] || '—'}<br>
-      ${c['需求'] ? '<b>需求:</b> ' + c['需求'] + '<br>' : ''}
-      ${c['跟进记录（6.26邀约）'] ? '<b>6.26邀约:</b> ' + c['跟进记录（6.26邀约）'] + '<br>' : ''}
-      <b>具体人物:</b> ${c['具体人物'] || '—'} · <b>是否已拜访:</b> ${c['是否已拜访'] || '—'} ${c['拜访日期'] ? '· 日期: '+c['拜访日期'] : ''}
-    </div>
-  </div>`;
-}
-
-function buildCard2(c, i) {
-  return `<div class="customer-card animate-fade-in" style="animation-delay:${(i%4)*0.1}s" onclick="this.classList.toggle('expanded')">
-    <div class="c-name">${c['客户名称'] || '未命名客户'}</div>
-    <div class="c-summary">${c['一句话总结'] || '—'}</div>
-    <div class="c-tags">
-      ${c['销售模式'] ? `<span class="tag tag-primary">${c['销售模式']}</span>` : ''}
-      ${c['买断|年费'] ? `<span class="tag ${String(c['买断|年费']).includes('年费')?'tag-success':'tag-danger'}">${c['买断|年费']}</span>` : ''}
-    </div>
-    <div class="c-detail">
-      <span>&#x1F4B0; ${c['合同金额'] || '—'}</span>
-      <span>&#x1F4C5; ${c['最早签约时间'] || '—'}</span>
-      <span>&#x23F3; ${c['合同到期'] || '—'}</span>
-    </div>
-    <div class="c-contact">
-      &#x1F464; ${c['客户主要联系人'] || '—'}
-    </div>
-    <div class="c-full-detail">
-      <b>公司业务:</b> ${c['公司业务情况'] || '—'}<br>
-      <b>拜访地址:</b> ${c['拜访地址'] || '—'}<br>
-      <b>产品版本:</b> ${c['产品版本'] || '—'}<br>
-      <b>具体买的产品:</b> ${c['具体买的产品'] || '—'}<br>
-      <b>建联情况:</b> ${c['建联情况'] || '—'}<br>
-      <b>最近到期:</b> ${c['最近到期时间'] || '—'}<br>
-      <b>交接备注:</b> ${c['交接备注'] || '—'}
-    </div>
-  </div>`;
-}
-
-// Data Table
-function renderDataTable() {
-  const customers = getCurrentCustomers();
-  const container = document.getElementById('dataTableContainer');
-  if (!customers || customers.length === 0) {
-    container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted)">暂无数据</div>';
-    return;
-  }
-
-  const fields = Object.keys(customers[0]);
-  let html = '<table class="data-table"><thead><tr>';
-  fields.forEach(f => { html += `<th>${f}</th>`; });
-  html += '</tr></thead><tbody>';
-  customers.forEach(c => {
-    html += '<tr>';
-    fields.forEach(f => {
-      let v = c[f] || '';
-      if (typeof v === 'string' && v.length > 60) v = v.substring(0,60) + '...';
-      html += `<td>${v}</td>`;
-    });
-    html += '</tr>';
-  });
   html += '</tbody></table>';
-  container.innerHTML = html;
+  list.innerHTML = html;
+  document.getElementById('totalLabel').textContent = data.length+'家';
+  document.getElementById('rcnt').textContent = '共 '+data.length+' 条';
 }
 
-// Search & Filter
-function filterCustomers() {
-  const q = document.getElementById('searchInput').value.trim().toLowerCase();
-  const filterVal = document.getElementById('filterSelect').value;
-  let customers = getCurrentCustomers();
-
-  if (q) {
-    customers = customers.filter(c => {
-      return Object.values(c).some(v => {
-        if (v === null || v === undefined) return false;
-        return String(v).toLowerCase().includes(q);
-      });
-    });
-  }
-  if (filterVal) {
-    customers = customers.filter(c => {
-      return Object.values(c).some(v => String(v || '').includes(filterVal));
-    });
-  }
-
-  renderCustomerCards(customers);
+// ====== Filter ======
+function filter() {
+  var q = document.getElementById('q').value.trim().toLowerCase();
+  var fl = document.getElementById('fl').value;
+  var fm = document.getElementById('fm').value;
+  var fv = document.getElementById('fv').value;
+  var d = customers;
+  if(q) d = d.filter(function(c){return Object.values(c).some(function(v){return String(v||'').toLowerCase().includes(q)})});
+  if(fl) d = d.filter(function(c){return String(c['客户等级']||'').includes(fl)});
+  if(fm) d = d.filter(function(c){return String(c['销售模式']||'').includes(fm)});
+  if(fv) d = d.filter(function(c){return String(c['是否已拜访']||'').includes(fv)});
+  renderCustomers(d);
 }
 
-// Tab Switch
-document.getElementById('tabBar').addEventListener('click', function(e) {
-  const tab = e.target.closest('.tab-item');
-  if (!tab) return;
-  document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-  tab.classList.add('active');
-  currentTab = tab.dataset.tab;
-  renderAll();
-});
-
-// Init
+// ====== Init ======
+window.addEventListener('resize', function(){Object.values(charts).forEach(function(c){if(c.resize)c.resize()})});
 document.addEventListener('DOMContentLoaded', fetchData);
-window.addEventListener('resize', () => {
-  Object.values(charts).forEach(c => { if (c && c.resize) c.resize(); });
-});
 </script>
-
 </body>
 </html>
